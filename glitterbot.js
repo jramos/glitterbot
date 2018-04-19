@@ -1,5 +1,5 @@
 var Botkit = require('botkit');
-var createNewImage = require('./createNewImage')
+var createNewImage = require('./createNewImage');
 var CronJob = require('cron').CronJob;
 var request = require('request');
 var timezone = 'America/Los_Angeles';
@@ -9,7 +9,7 @@ var webhookUrl = process.env.SLACK_WEBHOOK_URL;
 
 // If you want to use your own server, change this to the place you host the gitterbot /public folder
 // This folder needs to include the images.json file
-const IMAGE_SOURCE = 'http://glitter.appmantle.com/';
+const IMAGE_SOURCE = 'http://glitterbot.s3.amazonaws.com/';
 
 // Cronjob sends a new glitter every weekday at 9:00 and 14:00.
 const CRON = '00 9,14 * * 1-5';
