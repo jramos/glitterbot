@@ -9,7 +9,7 @@ var webhookUrl = process.env.SLACK_WEBHOOK_URL;
 
 // If you want to use your own server, change this to the place you host the gitterbot /public folder
 // This folder needs to include the images.json file
-const IMAGE_SOURCE = 'http://glitterbot.s3.amazonaws.com/wed/d3fded977861fdb4f38ca822c57ee840.gif';
+const IMAGE_SOURCE = 'http://glitterbot.s3.amazonaws.com/';
 
 // new glitter every weekday at 9:00
 const CRON = '00 9 * * 1-5';
