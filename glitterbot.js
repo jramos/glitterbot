@@ -1,91 +1,79 @@
-var Botkit = require('botkit');
-var createNewImage = require('./createNewImage');
-var CronJob = require('cron').CronJob;
-var request = require('request');
-var timezone = 'America/Los_Angeles';
+const axios = require("axios");
+const schedule = require("node-schedule");
+const program = require("commander");
 
-var controller = Botkit.slackbot({});
-var webhookUrl = process.env.SLACK_WEBHOOK_URL;
+// Define command line options and documentation.
+program
+  .option(
+    "-w, --webhook <url>",
+    "\x1b[1mRequired: The incoming webhook for your Slack team\x1b[0m"
+  )
+  .option("-i, --instant", "Run bot once without starting cronjob")
+  .option(
+    "-c, --cron [cron]",
+    "CRON string used for scheduling messages",
+    "00 09 * * 1-5"
+  )
+  .option(
+    "-s, --source [url]",
+    "The path to where images.json and all images are hosted",
+    "http://glitterbot.s3.amazonaws.com"
+  )
+  .option("-d, --debug", "Log complete axios error messages")
+  .parse(process.argv);
 
-// If you want to use your own server, change this to the place you host the gitterbot /public folder
-// This folder needs to include the images.json file
-const IMAGE_SOURCE = 'http://glitterbot.s3.amazonaws.com/';
-
-// new glitter every weekday at 9:00
-const CRON = '00 9 * * 1-5';
-
-// If Slack webhook url not provided, exit gracefully.
-if (webhookUrl === '') {
-    console.log('Please provide a Slack webhook URL');
-    process.exit(1);
+// If users didn't provide a Slack webhook URL, close the bot.
+if (!program.webhook) {
+  console.log("Please provide a Slack webhook URL");
+  program.help();
 }
 
-var glitterbot = controller.spawn({});
-glitterbot.configureIncomingWebhook({ url: webhookUrl });
+// If there is no instant flag, start a cronjob and send a message
+// so the user knows it's running.
+if (!program.instant) {
+  console.log("Glitterbot is running");
+  schedule.scheduleJob(program.cron, sendGlitter);
+} else {
+  sendGlitter();
+}
 
-function sendGlitter() {
-    // 20% chance of PARTY image
-    if (Math.random() < 0.2) {
-        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        const date = new Date();
-        const day = days[date.getDay()];
-
-        createNewImage(day).then(glitterUrl => {
-            request.post(webhookUrl, {
-                form: {
-                    payload: JSON.stringify({
-                        'icon_emoji': ':sparkles:',
-                        'username': 'Glitterbot',
-                        'text': glitterUrl
-                    })
-                }
-            });
-            console.log('Sent image ' + glitterUrl);
-        });
+async function sendGlitter() {
+  try {
+    // Choose if a generic image or a day specific image should be sent.
+    // There's a 25% chance a generic image gets chosen.
+    if (Math.random() > 0.75) {
+      var folder = "generic";
     } else {
-        // Get the list of images from the image source
-        request(`${IMAGE_SOURCE}images.json`, function(error, response, body) {
-            if (!error && response.statusCode == 200) {
-
-                // Parse image.json
-                const imageData = JSON.parse(body);
-
-                // Choose if a generic image or a day specific image should be sent
-                // There's a 25% chance a generic image gets chosen
-                let type = '';
-                if (Math.floor(Math.random() * 4) === 3) {
-                    type = 'generic';
-                } else {
-                    const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
-                    const date = new Date();
-                    type = days[date.getDay()];
-                }
-
-                // Get a random image of the chosen image type
-                let glitterImage = imageData[type][Math.floor(Math.random() * imageData[type].length)];
-                let glitterUrl = `${IMAGE_SOURCE + type}/${glitterImage}`;
-
-                // Sent image to Slack as Glitterbot
-                request.post(webhookUrl, {
-                    form: {
-                        payload: JSON.stringify({
-                            'icon_emoji': ':sparkles:',
-                            'username': 'Glitterbot',
-                            'text': glitterUrl
-                        })
-                    }
-                });
-
-                console.log('Sent image ' + glitterUrl);
-            } else {
-                console.log(`Error requesting images.json from ${IMAGE_SOURCE}`);
-            }
-        });
+      const days = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
+      var folder = days[new Date().getDay()];
     }
+
+    // Fetch the list of all images, and then select a
+    // random image of the previously chosen image type.
+    const { data } = await axios.get(`${program.source}/images.json`);
+    const images = data[folder];
+    const image = images[Math.floor(Math.random() * images.length)];
+    const url = `${program.source}/${folder}/${image}`;
+
+    // Sent image url to Slack
+    postMessage(url);
+  } catch (error) {
+    if (program.debug) console.log(error);
+    console.log(`Error requesting images.json from ${program.source}`);
+  }
 }
 
-// crontab
-// eslint-disable-next-line no-unused-vars
-const glitter = new CronJob(CRON, sendGlitter, null, true, timezone);
-
-console.log('Running');
+// Posts a Slack message to the webhook as Glitterbot.
+async function postMessage(text) {
+  try {
+    await axios.post(program.webhook, {
+      icon_emoji: ":sparkles:",
+      username: "Glitterbot",
+      text
+    });
+    console.log("Sent message: " + text);
+  } catch (error) {
+    if (program.debug) console.log(error);
+    console.log("Error sending message to Slack webhook");
+  }
+}
