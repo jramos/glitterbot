@@ -8,7 +8,7 @@ docker build -t glitterbot:latest .
 docker tag glitterbot:latest $ECR/glitterbot:latest
 docker push $ECR/glitterbot:latest
 
-aws s3 cp public/ s3://glitterbot/ --recursive --acl public-read
+aws s3 sync public/ s3://glitterbot/ --acl public-read --delete
 
 kubectl delete -f k8s/deployment.yml
 kubectl create -f k8s/deployment.yml
