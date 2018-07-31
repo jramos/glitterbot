@@ -1,8 +1,8 @@
 FROM node:alpine
 
 COPY package.json yarn.lock ./
-RUN yarn install
+RUN yarn install --no-cache --frozen-lockfile --production
 
-COPY *.js ./
+COPY src/* ./
 
-CMD node glitterbot.js
+CMD ["node", "glitterbot.js"]

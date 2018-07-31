@@ -25,18 +25,18 @@
   },
   "homepage": "https://github.com/appmantle/glitterbot#readme",
   "dependencies": {
-    "botkit": "^0.5",
+    "botkit": "^0.6.16",
     "convert-svg-to-jpeg": "^0.4.0",
     "cron": "^1.2.1",
     "get-pixels": "^3.3.0",
     "gif-encoder": "^0.6.1",
     "imgur-uploader": "^4.2.1",
     "md5-file": "^3.1.1",
-    "proxyquire": "^2.0.1",
-    "request": "^2.79.0",
-    "tape": "^4.9.0"
+    "request": "^2.79.0"
   },
   "devDependencies": {
-    "eslint": "^3.16.1"
+    "eslint": "^3.16.1",
+    "proxyquire": "^2.0.1",
+    "tape": "^4.9.0"
   }
 }
