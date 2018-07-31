@@ -1,6 +1,6 @@
 {
   "name": "glitterbot",
-  "version": "1.1.0",
+  "version": "1.0.0",
   "description": "Improves team morale by posting Glitterplaatjes to Slack",
   "main": "glitterbot.js",
   "scripts": {
@@ -25,17 +25,18 @@
   },
   "homepage": "https://github.com/appmantle/glitterbot#readme",
   "dependencies": {
-    "axios": "^0.18.0",
-    "commander": "^2.9.0",
+    "botkit": "^0.5",
     "convert-svg-to-jpeg": "^0.4.0",
     "cron": "^1.2.1",
     "get-pixels": "^3.3.0",
     "gif-encoder": "^0.6.1",
     "imgur-uploader": "^4.2.1",
     "md5-file": "^3.1.1",
-    "node-schedule": "^1.2.0",
     "proxyquire": "^2.0.1",
     "request": "^2.79.0",
     "tape": "^4.9.0"
+  },
+  "devDependencies": {
+    "eslint": "^3.16.1"
   }
 }

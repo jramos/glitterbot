@@ -42,39 +42,43 @@ This bot is written in JavaScript and requires Node.js to run.
 1. Create a new coming webhook on slack and select the channel you want your Glitterplaatjes to be send to
 2. Clone Glitterbot to your own machine
 3. Install all dependencies by running `npm install`
-4. Start the bot using `node glitterbot.js --webhook [URL]`, where `[URL]` the incoming webhook you just made.
+4. Start the bot using `node glitterbot.js -webhook [URL]`, where `[URL] the incoming webhook you just made.
 
 
 ### Using your own images
 If you don't like the Glitterplaatjes (What?!), Glitterbot can also send your team your own custom images. 
 
-1. Replace the images in the `public` folder with your own images.
-  **Make sure to maintain the existing folder structure.** Place images meant for specific days in the folders for these days (`public/mon` for monday, `public/tue` for tuesday). Place generic images that could be sent on any morning in the `public/generic` folder. Images should not be larger than 2MB, otherwise they won't automatically expand in Slack. To automatically remove bigger images, set `removeBig` to `true` in `images.js`.
+1. Replace the images in the `public` folder with your own images
+  **Make sure to maintain the excisting folder structure.** Place images meant for specific days in the folders for these days (`public/mon` for monday, `public/tue` for tuesday). Place generic images that could be sent on any morning in the `public/generic` folder.
 2. Run `node images.js` to generate a new `images.json` for your images.
-3. Upload the images.json file and all images to your own server.
-4. Change the source of the image host to your own server using the `--source` option.
+3. Upload the images.json file and all images to your own server
+4. Change the path of the image host to your own server in `glitterbot.js`
 
 ### Configuration
-You can add these options when running Glitterbot to change settings.
+You can add these 
 
-Option | Usage
+Flag | Usage
 --- | ---
-`-w, --webhook <url>` | Required: The URL of your incoming Slack webhook. You can configure these for in the [Slack App Directory](slack.com/apps/manage/custom-integrations)
-`-i, --instant` | When using this flag, the bot will instantly send an image to your Slack without starting a Cronjob.
-`-c, --cron [cron]` | CRON string used for scheduling messages (default: 00 09 * * 1-5)
-`-s, --source [url]` | The path to where images.json and all images are hosted. By default this is our Glitter CDN.
-`-h, --help` | Output usage information
+`--instant (-i)` | When using this flag, the bot will instantly send an image to your Slack without starting a Cronjob.
+`--webhook (-h) [url]` | The URL of your incoming Slack webhook. You can configure these for in the [Slack App Directory](slack.com/apps/manage/custom-integrations)
+
+In glitterbot.js itself you can change these settings:
+
+Setting | Usage
+--- | ---
+`IMAGE_SOURCE` | The path to where images.json and all images are hosted. By default this is our Glitter CDN.
+`CRON` | The Cron expression used determine when Glitterplaatjes should be sent. By default this is on weekdays at 9:00. If you want to receive Glitterplaatjes every day, change this to `00 09 * * *`.
 
 ## Contributing
 ### Adding new Glitterplaatjes
-1. Fork the repository on Github.
-2. Clone the repo to your own machine.
-3. Add your own Glitterplaatjes to the correct folders. Images should not be larger than 2MB, otherwise they won't automatically expand in Slack. To automatically remove bigger images, set `removeBig` to `true` in `images.js`.
-4. Install dependencies by running `npm install`.
-5. run `node images.js` to generate an updated `images.json` with your new Glitterplaatjes.
-6. Commit these changes to your own branch.
-7. Push your work back to your fork on GitHub.
-8. Submit a pull request to our repository.
+1. Fork the repository on Github
+2. Clone the repo to your own machine
+3. Add your own Glitterplaatjes to the correct folders
+4. Install dependencies by running `npm install`
+5. run `node images.js` to generate an updated `images.json` with your new Glitterplaatjes
+6. Commit these changes to your own branch
+7. Push your work back to your fork on GitHub
+8. Submit a pull request to our repository
 
 ### Improving code
 At Appmantle, we're always open to outside contributions to our projects. If you've ran into a bug or have found any code or documentation to improve, feel free to make a pull request with a bugfix or other improvements. If you don't know how to fix a bug yourself, just open a new issue and we'll try to fix it.
