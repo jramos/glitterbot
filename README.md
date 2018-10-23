@@ -1,5 +1,5 @@
 <div align="center">
-<img src="logo.png" width="185px">
+<img src="https://glitterbot.appmantle.com/logo.png" width="256px">
 
 # Glitterbot
 
@@ -16,15 +16,17 @@
 
 Glitterbot is a free and open source [Slack](http://slack.com) bot. The bot improves your team's productivity by boosting your teams morale each morning. Glitterbot accomplishes this morale boost by posting a new Glitterplaatje at the start of each day.
 
+For more information, visit the [Glitterbot website](https://glitterbot.appmantle.com/).
+
 ### After adopting Glitterbot, how much more productive is your team?
 
 > Glitterbot has greatly improved our teams morale. It makes our employees feel like their work has a higher purpose. Each new Glitterplaatje gives us a way to recognize our team members for a job well done.
 >
 > _- [Bert-Jan Verwer](https://github.com/verwer)_
 
-> Glitterbot is polluting the chat
+> Glitterbot is polluting the chat.
 >
-> _- [RainoBoy97](https://github.com/RainoBoy97)_
+> _- [Ryan Warsaw](https://github.com/ryanwarsaw)_
 
 > I love Glitterbot! Waking up every day and receiving my daily dose of motivation from Glitterbot always boosts my productivity 🤔🙏
 >
