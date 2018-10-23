@@ -18,7 +18,7 @@ program
   .option(
     "-s, --source [url]",
     "The path to where images.json and all images are hosted",
-    "http://glitterbot.s3.amazonaws.com/"
+    "http://glitterbot.s3.amazonaws.com"
   )
   .option("-d, --debug", "Log complete axios error messages")
   .parse(process.argv);
