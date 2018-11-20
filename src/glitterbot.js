@@ -13,7 +13,7 @@ program
   .option(
     "-c, --cron [cron]",
     "CRON string used for scheduling messages",
-    "00 09 * * 1-5"
+    "00 17 * * 1-5"
   )
   .option(
     "-s, --source [url]",
