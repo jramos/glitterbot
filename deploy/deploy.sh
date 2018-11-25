@@ -10,5 +10,5 @@ docker push $ECR/glitterbot:latest
 
 aws s3 sync public/ s3://glitterbot/ --acl public-read --delete
 
-kubectl delete -f k8s/deployment.yml
-kubectl create -f k8s/deployment.yml
+kubectl delete -f deploy/deployment.yml
+kubectl create -f deploy/deployment.yml
