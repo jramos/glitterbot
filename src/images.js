@@ -3,6 +3,7 @@ const md5File = require("md5-file");
 
 // Settings
 const imageFolder = "./public/";
+const langFolders = ["ja/", "nl/"];
 const subFolders = ["generic", "mon", "tue", "wed", "thu", "fri", "sat", "sun"];
 const outputFileName = "images.json";
 
@@ -10,24 +11,26 @@ const outputFileName = "images.json";
 let images = {};
 
 // Foreach all subfolders
-for (const subFolder of subFolders) {
-  // This will add the images to the global object
-  readdir(subFolder).then(images => {
-    // If the keys are equal to the given subfolders, we're done.
-    if (Object.keys(images).length == subFolders.length) {
-      // Write the object to a file
-      fs.writeFile(
-        imageFolder + outputFileName,
-        JSON.stringify(images, null, 4),
-        err => {
-          if (err) throw err;
+for (const langFolder of langFolders) {
+  for (const subFolder of subFolders) {
+    // This will add the images to the global object
+    readdir(langFolder+subFolder).then(images => {
+      // If the keys are equal to the given subfolders, we're done.
+      if (Object.keys(images).length == subFolders.length * langFolders.length) {
+        // Write the object to a file
+        fs.writeFile(
+          imageFolder + outputFileName,
+          JSON.stringify(images, null, 4),
+          err => {
+            if (err) throw err;
 
-          // Notify the user we're done
-          console.log("images.json saved");
-        }
-      );
-    }
-  });
+            // Notify the user we're done
+            console.log("images.json saved");
+          }
+        );
+      }
+    });
+  }
 }
 
 function readdir(subFolder) {
