@@ -44,7 +44,7 @@ function artificialIntelligence() {
 }
 
 function naturalLanguageProcessing() {
-  const languages = ["ja", "nl"];
+  const languages = ["en", "nl"];
   return languages[Math.floor(artificialIntelligence() * languages.length)];
 }
 
