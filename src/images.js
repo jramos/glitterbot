@@ -3,7 +3,7 @@ const md5File = require("md5-file");
 
 // Settings
 const imageFolder = "./public/";
-const langFolders = ["ja/", "nl/"];
+const langFolders = ["en/", "nl/"];
 const subFolders = ["generic", "mon", "tue", "wed", "thu", "fri", "sat", "sun"];
 const outputFileName = "images.json";
 
@@ -16,7 +16,7 @@ for (const langFolder of langFolders) {
     // This will add the images to the global object
     readdir(langFolder+subFolder).then(images => {
       // If the keys are equal to the given subfolders, we're done.
-      if (Object.keys(images).length == subFolders.length) {
+      if (Object.keys(images).length > 0 && Object.keys(images).length % subFolders.length === 0) {
         // Write the object to a file
         fs.writeFile(
           imageFolder + langFolder + outputFileName,
