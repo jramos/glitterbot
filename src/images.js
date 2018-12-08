@@ -16,18 +16,19 @@ for (const langFolder of langFolders) {
     // This will add the images to the global object
     readdir(langFolder+subFolder).then(images => {
       // If the keys are equal to the given subfolders, we're done.
-      if (Object.keys(images).length == subFolders.length * langFolders.length) {
+      if (Object.keys(images).length == subFolders.length) {
         // Write the object to a file
         fs.writeFile(
-          imageFolder + outputFileName,
+          imageFolder + langFolder + outputFileName,
           JSON.stringify(images, null, 4),
           err => {
             if (err) throw err;
 
             // Notify the user we're done
-            console.log("images.json saved");
+            console.log(`${langFolder}images.json saved`);
           }
         );
+        images = {};
       }
     });
   }
