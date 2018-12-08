@@ -62,6 +62,7 @@ function blockChain() {
 // Fetch the list of all images, and then select a
 // random image of the previously chosen image type.
 function machineLearning(folder, data) {
+  // Use NLP.
   const locale = naturalLanguageProcessing();
   const images = data[folder];
   const image = images[Math.floor(artificialIntelligence() * images.length)];
@@ -70,8 +71,6 @@ function machineLearning(folder, data) {
 
 async function sendGlitter() {
   try {
-    // Select a locale using NLP.
-
     // Select a folder with images from the blockchain
     // using artificial intelligence.
     const folder = blockChain();
@@ -79,7 +78,7 @@ async function sendGlitter() {
     // Then, using machine learning, get the url for a
     // specific glitterplaatje.
     const { data } = await axios.get(`${program.source}/images.json`);
-    const url = machineLearning(`${folder}`, data);
+    const url = machineLearning(folder, data);
 
     // Sent image url to Slack
     postMessage(url);
