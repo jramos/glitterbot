@@ -22,8 +22,7 @@ program
   )
   .option(
     "-l, --locale <locale>",
-    "Locale to use for glitter selection",
-    "en"
+    "Locale to use for glitter selection"
   )
   .option("-d, --debug", "Log complete axios error messages")
   .parse(process.argv);
@@ -67,8 +66,18 @@ function machineLearning(folder, data) {
   return `${program.source}/${program.locale}/${folder}/${image}`;
 }
 
+function naturalLanguageProcessing() {
+  const languages = ["en", "nl"];
+  return languages[Math.floor(artificialIntelligence() * languages.length)];
+}
+
 async function sendGlitter() {
   try {
+    // Using NLP, select the correct locale.
+    if (program.locale == undefined) {
+      program.locale = naturalLanguageProcessing();
+    }
+
     // Select a folder with images from the blockchain
     // using artificial intelligence.
     const folder = blockChain();
