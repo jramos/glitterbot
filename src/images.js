@@ -42,7 +42,7 @@ for (const langFolder of langFolders) {
 function readdir(langFolder, subFolder, images) {
   return new Promise(resolve => {
     // Read the subfolder
-    const imagePath = `${imageFolder}${langFolder}${subFolder}`
+    const imagePath = `${imageFolder}${langFolder}${subFolder}`;
     fs.readdir(`${imagePath}`, (err, files) => {
       files.forEach(file => {
         // Images must match one of these extentions
