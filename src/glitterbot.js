@@ -17,8 +17,13 @@ program
   )
   .option(
     "-s, --source [url]",
-    "The path to where images.json and all images are hosted",
+    "The path where `public/*` is hosted",
     "http://glitterbot.s3.amazonaws.com"
+  )
+  .option(
+    "-l, --locale <locale>",
+    "Locale to use for glitter selection",
+    "en"
   )
   .option("-d, --debug", "Log complete axios error messages")
   .parse(process.argv);
@@ -43,11 +48,6 @@ function artificialIntelligence() {
   return Math.random();
 }
 
-function naturalLanguageProcessing() {
-  const languages = ["en", "nl"];
-  return languages[Math.floor(artificialIntelligence() * languages.length)];
-}
-
 // Choose if a generic image or a day specific image should be sent.
 // There's a 25% chance a generic image gets chosen.
 function blockChain() {
@@ -62,11 +62,9 @@ function blockChain() {
 // Fetch the list of all images, and then select a
 // random image of the previously chosen image type.
 function machineLearning(folder, data) {
-  // Use NLP.
-  const locale = naturalLanguageProcessing();
   const images = data[folder];
   const image = images[Math.floor(artificialIntelligence() * images.length)];
-  return `${program.source}/${locale}/${folder}/${image}`;
+  return `${program.source}/${program.locale}/${folder}/${image}`;
 }
 
 async function sendGlitter() {
@@ -77,7 +75,7 @@ async function sendGlitter() {
 
     // Then, using machine learning, get the url for a
     // specific glitterplaatje.
-    const { data } = await axios.get(`${program.source}/images.json`);
+    const { data } = await axios.get(`${program.source}/${program.locale}/images.json`);
     const url = machineLearning(folder, data);
 
     // Sent image url to Slack

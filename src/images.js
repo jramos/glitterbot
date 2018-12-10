@@ -7,34 +7,39 @@ const langFolders = ["en/", "nl/"];
 const subFolders = ["generic", "mon", "tue", "wed", "thu", "fri", "sat", "sun"];
 const outputFileName = "images.json";
 
-// Object we're going to fill
-let images = {};
-
 // Foreach all subfolders
 for (const langFolder of langFolders) {
+  // Object we're going to fill
+  let images = {};
+
   for (const subFolder of subFolders) {
     // This will add the images to the global object
-    readdir(langFolder+subFolder).then(images => {
+    readdir(langFolder+subFolder, images).then(results => {
       // If the keys are equal to the given subfolders, we're done.
-      if (Object.keys(images).length > 0 && Object.keys(images).length % subFolders.length === 0) {
+      if (Object.keys(results).length === subFolders.length) {
+        // Sort
+        const ordered = {};
+        Object.keys(results).sort().forEach(function(key) {
+          ordered[key] = results[key];
+        });
         // Write the object to a file
         fs.writeFile(
           imageFolder + langFolder + outputFileName,
-          JSON.stringify(images, null, 4),
+          JSON.stringify(ordered, null, 4),
           err => {
             if (err) throw err;
+            images = {};
 
             // Notify the user we're done
             console.log(`${langFolder}images.json saved`);
           }
         );
-        images = {};
       }
     });
   }
 }
 
-function readdir(subFolder) {
+function readdir(subFolder, images) {
   return new Promise(resolve => {
     // Read the subfolder
     fs.readdir(`${imageFolder}${subFolder}`, (err, files) => {
@@ -53,10 +58,11 @@ function readdir(subFolder) {
 
           // When the key in the global object doesn't exist yet,
           // create it as a new array
-          images[subFolder] = images[subFolder] || [];
+          const key = subFolder.split("/")[1];
+          images[key] = images[key] || [];
 
           // Add image to given key
-          images[subFolder].push(file);
+          images[key].push(file);
         }
       });
 
