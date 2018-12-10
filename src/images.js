@@ -14,7 +14,7 @@ for (const langFolder of langFolders) {
 
   for (const subFolder of subFolders) {
     // This will add the images to the global object
-    readdir(langFolder+subFolder, images).then(results => {
+    readdir(langFolder, subFolder, images).then(results => {
       // If the keys are equal to the given subfolders, we're done.
       if (Object.keys(results).length === subFolders.length) {
         // Sort
@@ -39,18 +39,19 @@ for (const langFolder of langFolders) {
   }
 }
 
-function readdir(subFolder, images) {
+function readdir(langFolder, subFolder, images) {
   return new Promise(resolve => {
     // Read the subfolder
-    fs.readdir(`${imageFolder}${subFolder}`, (err, files) => {
+    const imagePath = `${imageFolder}${langFolder}${subFolder}`
+    fs.readdir(`${imagePath}`, (err, files) => {
       files.forEach(file => {
         // Images must match one of these extentions
         if (file.match(/\.((?:gif|jpg|jpeg|png))(?:[?#]|$)/i)) {
           // Get the MD5 sum of the image
-          const hash = md5File.sync(`${imageFolder}${subFolder}/${file}`);
+          const hash = md5File.sync(`${imagePath}/${file}`);
           fs.rename(
-            `${imageFolder}${subFolder}/${file}`,
-            `${imageFolder}${subFolder}/${hash}.${file.split(".").pop()}`,
+            `${imagePath}/${file}`,
+            `${imagePath}/${hash}.${file.split(".").pop()}`,
             function(err) {
               if (err) console.log("ERROR: " + err);
             }
@@ -58,11 +59,10 @@ function readdir(subFolder, images) {
 
           // When the key in the global object doesn't exist yet,
           // create it as a new array
-          const key = subFolder.split("/")[1];
-          images[key] = images[key] || [];
+          images[subFolder] = images[subFolder] || [];
 
           // Add image to given key
-          images[key].push(file);
+          images[subFolder].push(file);
         }
       });
 
