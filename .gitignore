@@ -9,5 +9,5 @@ yarn-error.log*
 # Optional eslint cache
 .eslintcache
 
-# Dependency directorie
+# Dependency directories
 node_modules/
