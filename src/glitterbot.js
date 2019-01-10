@@ -17,8 +17,12 @@ program
   )
   .option(
     "-s, --source [url]",
-    "The path to where images.json and all images are hosted",
+    "The path where `public/*` is hosted",
     "http://glitterbot.s3.amazonaws.com"
+  )
+  .option(
+    "-l, --locale <locale>",
+    "Locale to use for glitter selection"
   )
   .option("-d, --debug", "Log complete axios error messages")
   .parse(process.argv);
@@ -59,18 +63,28 @@ function blockChain() {
 function machineLearning(folder, data) {
   const images = data[folder];
   const image = images[Math.floor(artificialIntelligence() * images.length)];
-  return `${program.source}/${folder}/${image}`;
+  return `${program.source}/${program.locale}/${folder}/${image}`;
+}
+
+function naturalLanguageProcessing() {
+  const languages = ["en", "nl"];
+  return languages[Math.floor(artificialIntelligence() * languages.length)];
 }
 
 async function sendGlitter() {
   try {
+    // Using NLP, select the correct locale.
+    if (program.locale == undefined) {
+      program.locale = naturalLanguageProcessing();
+    }
+
     // Select a folder with images from the blockchain
     // using artificial intelligence.
     const folder = blockChain();
 
     // Then, using machine learning, get the url for a
     // specific glitterplaatje.
-    const { data } = await axios.get(`${program.source}/images.json`);
+    const { data } = await axios.get(`${program.source}/${program.locale}/images.json`);
     const url = machineLearning(folder, data);
 
     // Sent image url to Slack
