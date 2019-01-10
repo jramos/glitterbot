@@ -24,6 +24,10 @@ program
     "-l, --locale <locale>",
     "Locale to use for glitter selection"
   )
+  .option(
+    "-u, --url <url>",
+    "URL to send"
+  )
   .option("-d, --debug", "Log complete axios error messages")
   .parse(process.argv);
 
@@ -82,10 +86,12 @@ async function sendGlitter() {
     // using artificial intelligence.
     const folder = blockChain();
 
-    // Then, using machine learning, get the url for a
-    // specific glitterplaatje.
-    const { data } = await axios.get(`${program.source}/${program.locale}/images.json`);
-    const url = machineLearning(folder, data);
+    let url = program.url;
+    if (url === undefined) {
+      // Using machine learning, get the url for a specific glitterplaatje.
+      const { data } = await axios.get(`${program.source}/${program.locale}/images.json`);
+      url = machineLearning(folder, data);
+    }
 
     // Sent image url to Slack
     postMessage(url);
